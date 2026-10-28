@@ -1,37 +1,30 @@
-# Data: sources and what was changed
+# Sources of the data in this folder
 
-## Reads (`data/reads/`) - real RNA-seq of one Holstein-Friesian calf
+## Reads (`reads/`)
 
-| Sample | Tissue | ENA run | GEO sample | Read pairs in the tutorial | File size (R1 + R2) |
+Liver RNA-seq of three Danish Landrace boars, one from each boar-taint group. They are three of the nine boars used in the Day 2 R tutorials (same animal numbers).
+
+| File prefix | Group | Animal | GEO sample | ENA run | Reads in the original run |
 |---|---|---|---|---|---|
-| `liver`  | liver           | SRR32383427 | GSM8800637 (Liver_AI_Female_2)  | 100,000 | 4.9 + 5.0 MB |
-| `muscle` | skeletal muscle | SRR32383411 | GSM8800653 (Muscle_AI_Female_2) | 100,000 | 3.6 + 3.6 MB |
+| `high_7107` | High | 7107 | GSM2461212 | SRR7041911 | 18,363,245 pairs |
+| `medium_2111` | Medium | 2111 | GSM2461225 | SRR7041924 | 19,949,217 pairs |
+| `low_1105` | Low | 1105 | GSM2461240 | SRR7041939 | 15,034,351 pairs |
 
-**Source.** GEO series **GSE289870** = European Nucleotide Archive project **PRJNA1225222** (University College Dublin; dairy calves born after artificial insemination or in-vitro embryo production, liver, muscle and blood RNA-seq at about 4 months of age). The two samples are liver and muscle of the same female calf (AI group, 138 days old at biopsy). Library: polyA RNA, TruSeq stranded mRNA (**reverse-stranded**, `featureCounts -s 2`), Illumina NovaSeq 6000, paired-end 2 x 101 bp, about 23 million read pairs (2.3 GB) per run. Public data. The authors' own processing was FastQC + Trimmomatic + STAR (ARS-UCD1.3) + featureCounts.
+* Series: GEO **GSE113316** = ENA / BioProject **PRJNA451072** (SRA study SRP141481), "Differential expression and co-expression gene networks reveal candidate biomarkers of boar taint in non-castrated pigs (RNA-seq data set)".
+* Total RNA from liver and testis of 48 Danish Landrace pigs with low, medium and high genetic merit of boar taint; Illumina HiSeq 2500, paired-end 2 x 100 bases.
+* Contributors: Markus Drag, Ruta Skinkyte-Juskiene, Duy N. Do, Lisette J. Kogelman, Haja N. Kadarmideen.
 
-**What was done to the reads** (script `data/make_subset.sh`, instructor use only):
+**What was changed:** nothing in the reads themselves. Only the first 8,000,000 read pairs of each run were used; they were aligned to pig chromosome 12 and the first 100,000 pairs that align properly to it were kept, unchanged (same names, bases and qualities). `make_subset.sh` does exactly this.
+Because the reads were chosen by their alignment to chromosome 12, the alignment rate in the tutorial is much higher than in a real experiment.
 
-1. Only the **first 4,000,000 read pairs** of each run were streamed from ENA (about 200 MB per mate instead of the full file).
-2. These were aligned with HISAT2 to cattle **chromosome 19** (Ensembl release 114, ARS-UCD2.0). 206,696 liver pairs and 512,004 muscle pairs aligned properly.
-3. The **first 100,000 of these pairs** (original file order) were written out: **both mates, exactly as the sequencer wrote them** (read names, bases, qualities). Nothing was trimmed, corrected or re-sampled.
+## Reference (`ref/`)
 
-**What this means for the data** (say it openly in class):
-
-* Every read pair comes from chromosome 19 by construction, so the alignment rate in the tutorial (> 99 %) is much higher than in a real experiment (85-95 %), and the numbers of "genes detected" are those of one chromosome (1,771 genes), not of the genome.
-* Because only the first part of each file was used, the reads come from the first tiles of one lane; they are not a random sample of the whole run, but the gene counts behave like a normal (small) RNA-seq sample.
-* Muscle is dominated by a few very abundant genes (the myosin heavy chain MYH1 alone has more than half of the counts on chromosome 19) - a real property of skeletal muscle that is useful for talking about normalisation.
-* One sample per tissue = no replicates: the matrix shows the biology but cannot be used for statistics.
-
-## Reference (`data/ref/`)
-
-| File | Source |
-|---|---|
-| `chr19.fa.gz` | Ensembl release 114, `Bos_taurus.ARS-UCD2.0.dna.primary_assembly.19.fa.gz` (unchanged), 63,449,741 bases |
-| `chr19.gtf.gz` | Ensembl release 114, `Bos_taurus.ARS-UCD2.0.114.gtf.gz`, header lines and all lines of chromosome 19 (1,771 genes) |
-
-Ensembl data are free to use (https://www.ensembl.org/info/about/legal/disclaimer.html).
+* `chr12.fa.gz`: *Sus scrofa* chromosome 12, assembly **Sscrofa10.2**, Ensembl release 79 (`Sus_scrofa.Sscrofa10.2.dna.chromosome.12.fa.gz`), unchanged.
+* `chr12.gtf.gz`: the lines of chromosome 12 from the Ensembl release 79 gene annotation (`Sus_scrofa.Sscrofa10.2.79.gtf.gz`).
+* Release 79 is the version that matches the gene IDs of the count tables in the Day 2 R tutorials.
 
 ## Please cite
-* The GEO series GSE289870 / ENA project PRJNA1225222.
-* Ensembl: Harrison PW et al. (2024) Ensembl 2024. Nucleic Acids Research 52:D891-D899.
-* Tools: FastQC (Andrews), MultiQC (Ewels et al. 2016), fastp (Chen et al. 2018), HISAT2 (Kim et al. 2019), samtools (Danecek et al. 2021), featureCounts (Liao et al. 2014).
+
+* Drag M, Skinkyte-Juskiene R, Do DN, et al. (2017). Differential expression and co-expression gene networks reveal candidate biomarkers of boar taint in non-castrated pigs. *Scientific Reports*. doi:10.1038/s41598-017-11928-0 (PubMed 28939879)
+* Drag M, Hansen MB, Kadarmideen HN, et al. (2018). Systems genomics study reveals expression quantitative trait loci, regulator genes and pathways associated with boar taint in pigs. *PLoS ONE*. doi:10.1371/journal.pone.0192673 (PubMed 29438444)
+* GEO series GSE113316 / ENA project PRJNA451072 for the reads, and Ensembl release 79 for the reference.
