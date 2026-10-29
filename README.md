@@ -9,7 +9,7 @@ FastQC, MultiQC, fastp, HISAT2, samtools and featureCounts to a **gene count mat
 |---|---|
 | **A** | Look at the files: FASTQ reads, FASTA reference, GTF annotation |
 | **B** | 16 steps: FastQC - MultiQC - fastp - FastQC again - HISAT2 index - HISAT2 alignment - BAM files - alignment QC - library strandedness - featureCounts - gene count matrix - look at the matrix |
-| **C** | 5 figures (read quality, alignment and counting, three livers compared, top genes, counts along chromosome 12) |
+| **C** | 1 figure: what happened to the reads (HISAT2 alignment and featureCounts assignment) |
 
 ## Run it in Google Colab (nothing to install)
 
