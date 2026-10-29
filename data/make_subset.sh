@@ -1,5 +1,5 @@
 #!/bin/bash
-# How the small teaching data in data/ were made (instructor use only - participants do NOT run this).
+# How the small teaching data in data/ were made (for reference - you do not need to run this).
 #
 # Source: three real RNA-seq runs of LIVER from three Danish Landrace boars (one per boar-taint group),
 #   GEO GSE113316 / ENA PRJNA451072 (the same animals as the Day 2 R tutorials):
